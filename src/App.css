@@ -1,0 +1,38 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', Arial, sans-serif;
+  background: #f4f4f4;
+  overflow-x: hidden; /* fix extra right space */
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Optional: prevent overflow from media */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hide scrollbar */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.flex-1 {
+  flex:1;
+}
+
+.flexColumn {
+  flex-direction: column !important;
+}
