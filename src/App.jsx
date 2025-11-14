@@ -36,7 +36,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import PublicRoute from "./components/PublicRoute";
 import Coupons from "./pages/admin/Coupons";
 
-const BASE_URL = "http://localhost:3000/";
+const BASE_URL = "http://65.1.253.52";
 
 function App() {
 	const dispatch = useDispatch();
@@ -182,7 +182,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/bookings/:id"
+						path="/bookings"
 						element={
 							<ProtectedRoute>
 								<BookingHistory />

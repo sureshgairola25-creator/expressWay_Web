@@ -191,14 +191,14 @@ export default function HeroSection() {
 						<img
 							src={cabLogoImage}
 							alt="Logo"
-							style={{ height: 70, borderRadius: 8, background: "#fff" }}
+							style={{ height: 70, borderRadius: 8 }}
 						/>
 					</Box>
 					<Box sx={{ pl: 21, display: { xs: "none", md: "block" } }}>
 						<img
 							src={cabLogoImage || "https://expresswaycab.com/wp-content/uploads/2025/09/expressway_logo_new-modified.png"}
 							alt="Logo"
-							style={{ height: 70, borderRadius: 8, background: "#fff" }}
+							style={{ height: 70, borderRadius: 8 }}
 						/>
 					</Box>
 					<Box sx={{ display: { md: "flex", sm: "none", xs: "none" }, gap: 3 }}>
@@ -444,7 +444,15 @@ export default function HeroSection() {
 											color="#222"
 											fontWeight={500}
 											mt={1}
-											sx={{ cursor: "pointer" }}
+											sx={{
+												display: "inline-block",      
+												padding: "8px 12px",
+												borderRadius: "6px",
+												cursor: "pointer",
+												backgroundColor: "#e0f0ff",
+												color: "#007bff",
+												boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+											}}
 											onClick={() => setOpenPickupModal(true)}
 										>
 											Pick Up :{" "}
@@ -629,7 +637,15 @@ export default function HeroSection() {
 											color="#222"
 											fontWeight={500}
 											mt={1}
-											sx={{ cursor: "pointer" }}
+											sx={{
+												display: "inline-block",      
+												padding: "8px 12px",
+												borderRadius: "6px",
+												cursor: "pointer",
+												backgroundColor: "#e0f0ff",
+												color: "#007bff",
+												boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+											}}
 											onClick={() => setOpenDropModal(true)}
 										>
 											Drop :{" "}

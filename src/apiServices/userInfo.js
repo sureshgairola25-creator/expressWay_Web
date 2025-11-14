@@ -2,7 +2,8 @@ import apiClient from '../api/apiClient';
 
 const API_ENDPOINTS = {
   USER_ME: 'user/me',
-  USER_UPDATE: 'user/update'
+  USER_UPDATE: 'user/update',
+  USER_RIDES: 'user/rides',
 };
 
 
@@ -32,4 +33,13 @@ export async function updateUserDataById(body) {
     console.error("Error in getUserDatabyId:", error);
     return {};
   }
+}
+export async function fetchUserRides(userId) {
+    try {
+      const response = await apiClient.get(`${API_ENDPOINTS.USER_RIDES}/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch user rides:', error);
+      return {};
+    }
 }

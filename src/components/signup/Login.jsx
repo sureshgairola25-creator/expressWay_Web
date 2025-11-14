@@ -116,6 +116,8 @@ const AuthPage = () => {
 
       // Save token and user info to localStorage
       localStorage.setItem('authToken', response.token);
+      localStorage.setItem('userInfo', JSON.stringify(response.data));
+
       // localStorage.setItem('userInfo', JSON.stringify(response.user || {}));
 
       dispatch(setUserInfo(response.data))
@@ -123,11 +125,12 @@ const AuthPage = () => {
       if (response.data.role == "admin"){
         navigate('/admin/dashboard');
       }else{
-        if (paymentInfo){
-          navigate('/payment/preview')
-        }else{
-          navigate('/profile');
-        }
+        navigate('/profile');
+        // if (paymentInfo){
+        //   navigate('/payment/preview')
+        // }else{
+        //   navigate('/profile');
+        // }
       }
     } catch (error) {
       console.error('Login error:', error);

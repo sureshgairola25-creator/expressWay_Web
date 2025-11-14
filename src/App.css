@@ -36,3 +36,8 @@ body::-webkit-scrollbar {
 .flexColumn {
   flex-direction: column !important;
 }
+
+.css-1mo80tc-MuiDrawer-docked {
+  width: 180px !important;
+}
+

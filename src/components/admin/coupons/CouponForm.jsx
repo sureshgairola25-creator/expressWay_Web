@@ -34,36 +34,36 @@ const validationSchema = Yup.object({
     .required('Coupon code is required')
     .max(20, 'Code must be at most 20 characters'),
   description: Yup.string().max(255, 'Description must be at most 255 characters'),
-  discountType: Yup.string().oneOf(['percentage', 'flat'], 'Invalid discount type').required('Required'),
-  discountValue: Yup.number()
+  discount_type: Yup.string().oneOf(['percentage', 'flat'], 'Invalid discount type').required('Required'),
+  discount_value: Yup.number()
     .typeError('Must be a number')
     .positive('Must be positive')
     .required('Required')
-    .when('discountType', {
+    .when('discount_type', {
       is: 'percentage',
       then: (schema) => schema.max(100, 'Percentage must be between 0 and 100'),
     }),
-  minOrderAmount: Yup.number()
+  min_order_amount: Yup.number()
     .typeError('Must be a number')
     .min(0, 'Must be 0 or more')
     .required('Required'),
-  maxDiscountAmount: Yup.number()
+  max_discount_amount: Yup.number()
     .typeError('Must be a number')
-    .when('discountType', {
+    .when('discount_type', {
       is: 'percentage',
       then: (schema) => schema.min(0, 'Must be 0 or more').required('Required'),
     }),
-  startDate: Yup.date().required('Start date is required'),
-  endDate: Yup.date()
+  start_date: Yup.date().required('Start date is required'),
+  end_date: Yup.date()
     .required('End date is required')
-    .min(Yup.ref('startDate'), 'End date must be after start date'),
+    .min(Yup.ref('start_date'), 'End date must be after start date'),
   status: Yup.boolean(),
-  usageLimitPerUser: Yup.number()
+  usage_limit_per_user: Yup.number()
     .typeError('Must be a number')
     .integer('Must be an integer')
     .min(1, 'Must be at least 1')
     .required('Required'),
-  totalUsageLimit: Yup.number()
+  total_usage_limit: Yup.number()
     .typeError('Must be a number')
     .integer('Must be an integer')
     .min(1, 'Must be at least 1')
@@ -82,15 +82,15 @@ const CouponForm = () => {
     initialValues: {
       code: '',
       description: '',
-      discountType: 'percentage',
-      discountValue: '',
-      minOrderAmount: '',
-      maxDiscountAmount: '',
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+      discount_type: 'percentage',
+      discount_value: '',
+      min_order_amount: '',
+      max_discount_amount: '',
+      start_date: new Date(),
+      end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
       status: true,
-      usageLimitPerUser: 1,
-      totalUsageLimit: 100,
+      usage_limit_per_user: 1,
+      total_usage_limit: 100,
       image: null,
     },
     validationSchema,
@@ -126,14 +126,15 @@ const CouponForm = () => {
     const fetchCoupon = async () => {
       try {
         const coupon = await getCouponById(id);
+        console.log(coupon);
         formik.setValues({
-          ...coupon,
-          status: coupon.status === 'active',
-          startDate: new Date(coupon.startDate),
-          endDate: new Date(coupon.endDate),
+          ...coupon.data,
+          status: coupon.data.status === 'active',
+          start_date: new Date(coupon.data.start_date),
+          end_date: new Date(coupon.data.end_date),
         });
-        if (coupon.image) {
-          setImagePreview(coupon.image);
+        if (coupon.data.image) {
+          setImagePreview(coupon.data.image);
         }
       } catch (error) {
         console.error('Error fetching coupon:', error);
@@ -228,19 +229,19 @@ const CouponForm = () => {
                         <InputLabel id="discount-type-label">Discount Type</InputLabel>
                         <Select
                           labelId="discount-type-label"
-                          id="discountType"
-                          name="discountType"
-                          value={formik.values.discountType}
+                          id="discount_type"
+                          name="discount_type"
+                          value={formik.values.discount_type}
                           label="Discount Type"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
-                          error={formik.touched.discountType && Boolean(formik.errors.discountType)}
+                          error={formik.touched.discount_type && Boolean(formik.errors.discount_type)}
                         >
                           <MenuItem value="percentage">Percentage</MenuItem>
                           <MenuItem value="flat">Flat Amount</MenuItem>
                         </Select>
-                        {formik.touched.discountType && formik.errors.discountType && (
-                          <FormHelperText error>{formik.errors.discountType}</FormHelperText>
+                        {formik.touched.discount_type && formik.errors.discount_type && (
+                          <FormHelperText error>{formik.errors.discount_type}</FormHelperText>
                         )}
                       </FormControl>
                     </Grid>
@@ -248,42 +249,42 @@ const CouponForm = () => {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
-                        id="discountValue"
-                        name="discountValue"
+                        id="discount_value"
+                        name="discount_value"
                         label={
-                          formik.values.discountType === 'percentage'
+                          formik.values.discount_type === 'percentage'
                             ? 'Discount Percentage'
                             : 'Discount Amount'
                         }
                         type="number"
-                        value={formik.values.discountValue}
+                        value={formik.values.discount_value}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        error={formik.touched.discountValue && Boolean(formik.errors.discountValue)}
-                        helperText={formik.touched.discountValue && formik.errors.discountValue}
+                        error={formik.touched.discount_value && Boolean(formik.errors.discount_value)}
+                        helperText={formik.touched.discount_value && formik.errors.discount_value}
                         InputProps={{
-                          endAdornment: formik.values.discountType === 'percentage' ? '%' : '₹',
+                          endAdornment: formik.values.discount_type === 'percentage' ? '%' : '₹',
                         }}
                       />
                     </Grid>
                     
-                    {formik.values.discountType === 'percentage' && (
+                    {formik.values.discount_type === 'percentage' && (
                       <Grid item xs={12} sm={6}>
                         <TextField
                           fullWidth
-                          id="maxDiscountAmount"
-                          name="maxDiscountAmount"
+                          id="max_discount_amount"
+                          name="max_discount_amount"
                           label="Maximum Discount Amount (₹)"
                           type="number"
-                          value={formik.values.maxDiscountAmount}
+                          value={formik.values.max_discount_amount}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           error={
-                            formik.touched.maxDiscountAmount &&
-                            Boolean(formik.errors.maxDiscountAmount)
+                            formik.touched.max_discount_amount &&
+                            Boolean(formik.errors.max_discount_amount)
                           }
                           helperText={
-                            formik.touched.maxDiscountAmount && formik.errors.maxDiscountAmount
+                            formik.touched.max_discount_amount && formik.errors.max_discount_amount
                           }
                         />
                       </Grid>
@@ -292,18 +293,18 @@ const CouponForm = () => {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
-                        id="minOrderAmount"
-                        name="minOrderAmount"
+                        id="min_order_amount"
+                        name="min_order_amount"
                         label="Minimum Order Amount (₹)"
                         type="number"
-                        value={formik.values.minOrderAmount}
+                        value={formik.values.min_order_amount}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={
-                          formik.touched.minOrderAmount && Boolean(formik.errors.minOrderAmount)
+                          formik.touched.min_order_amount && Boolean(formik.errors.min_order_amount)
                         }
                         helperText={
-                          formik.touched.minOrderAmount && formik.errors.minOrderAmount
+                          formik.touched.min_order_amount && formik.errors.min_order_amount
                         }
                       />
                     </Grid>
@@ -341,19 +342,19 @@ const CouponForm = () => {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
-                        id="usageLimitPerUser"
-                        name="usageLimitPerUser"
+                        id="usage_limit_per_user"
+                        name="usage_limit_per_user"
                         label="Usage Limit Per User"
                         type="number"
-                        value={formik.values.usageLimitPerUser}
+                        value={formik.values.usage_limit_per_user}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={
-                          formik.touched.usageLimitPerUser &&
-                          Boolean(formik.errors.usageLimitPerUser)
+                          formik.touched.usage_limit_per_user &&
+                          Boolean(formik.errors.usage_limit_per_user)
                         }
                         helperText={
-                          formik.touched.usageLimitPerUser && formik.errors.usageLimitPerUser
+                          formik.touched.usage_limit_per_user && formik.errors.usage_limit_per_user
                         }
                       />
                     </Grid>
@@ -361,19 +362,19 @@ const CouponForm = () => {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
-                        id="totalUsageLimit"
-                        name="totalUsageLimit"
+                        id="total_usage_limit"
+                        name="total_usage_limit"
                         label="Total Usage Limit"
                         type="number"
-                        value={formik.values.totalUsageLimit}
+                        value={formik.values.total_usage_limit}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={
-                          formik.touched.totalUsageLimit &&
-                          Boolean(formik.errors.totalUsageLimit)
+                          formik.touched.total_usage_limit &&
+                          Boolean(formik.errors.total_usage_limit)
                         }
                         helperText={
-                          formik.touched.totalUsageLimit && formik.errors.totalUsageLimit
+                          formik.touched.total_usage_limit && formik.errors.total_usage_limit
                         }
                       />
                     </Grid>
@@ -404,7 +405,7 @@ const CouponForm = () => {
             </Grid>
             
             <Grid item xs={12} md={4}>
-              <Card>
+              {/* <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
                     Coupon Image
@@ -475,7 +476,7 @@ const CouponForm = () => {
                     {formik.touched.image && formik.errors.image}
                   </FormHelperText>
                 </CardContent>
-              </Card>
+              </Card> */}
               
               <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                 <Button

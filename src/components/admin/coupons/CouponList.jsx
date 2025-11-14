@@ -19,7 +19,7 @@ import {
   Chip,
   Tooltip,
 } from '@mui/material';
-import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, Padding } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { getCoupons, deleteCoupon, formatCouponForDisplay } from "../../../../src/apiServices/couponService";
 import PageHeader from '../../common/PageHeader';
@@ -43,8 +43,11 @@ const CouponList = () => {
   const fetchCoupons = async () => {
     try {
       setLoading(true);
-      const data = await getCoupons();
-      setCoupons(data.map(coupon => formatCouponForDisplay(coupon)));
+      const response = await getCoupons();
+      // The API returns data in response.data array
+      if (response && response.data) {
+        setCoupons(response.data.map(coupon => formatCouponForDisplay(coupon)));
+      }
     } catch (error) {
       console.error('Error fetching coupons:', error);
       toast.error('Failed to load coupons');
@@ -96,7 +99,7 @@ const CouponList = () => {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" style={{ padding: '20px' }}>
       <PageHeader
         title="Coupon Management"
         subtitle="Manage your promotional coupons and discounts"
@@ -170,30 +173,30 @@ const CouponList = () => {
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={coupon.discountInfo}
+                          label={coupon.discount_value}
                           color="primary"
                           size="small"
                           variant="outlined"
                         />
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2">{coupon.validity}</Typography>
+                        <Typography variant="body2">{coupon.end_date}</Typography>
                       </TableCell>
                       <TableCell>
                         <Chip
                           label={coupon.status}
-                          color={coupon.status === 'active' ? 'success' : 'default'}
+                          color={coupon.status === true ? 'success' : 'default'}
                           size="small"
                         />
                       </TableCell>
                       <TableCell align="right">
-                        <Tooltip title="Edit">
-                          <IconButton onClick={() => handleEdit(coupon._id)}>
+                        {/* <Tooltip title="Edit">
+                          <IconButton onClick={() => handleEdit(coupon.id)}>
                             <EditIcon />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip> */}
                         <Tooltip title="Delete">
-                          <IconButton onClick={() => handleDeleteClick(coupon._id)} color="error">
+                          <IconButton onClick={() => handleDeleteClick(coupon.id)} color="error">
                             <DeleteIcon />
                           </IconButton>
                         </Tooltip>
@@ -204,7 +207,7 @@ const CouponList = () => {
             </Table>
           </TableContainer>
           
-          <TablePagination
+          {/* <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={coupons.length}
@@ -212,7 +215,7 @@ const CouponList = () => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          /> */}
         </CardContent>
       </Card>
 

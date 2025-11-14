@@ -125,8 +125,10 @@ const defaultTicketData = {
 const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 	const navigate = useNavigate();
 	const paymentInfo = useSelector((state) => state.paymentInfo.paymentInfo);
-	const userProfileData = useSelector((state) => state.userInfo.userInfo);
 	console.log("paymentInfo =>", paymentInfo);
+	
+	const userProfileData = useSelector((state) => state.userInfo.userInfo);
+	console.log("userProfileData =>", userProfileData);
 	const [couponInput, setCouponInput] = useState("");
 	const [passengerDetails, setPassengerDetails] = useState({
 		name: userProfileData?.firstName ? userProfileData?.firstName : "",
@@ -174,8 +176,15 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 		const res = await initiateCheckout(
 			userProfileData?.id,
 			paymentInfo?.tripId,
+			age || userProfileData?.ageRange,
 			paymentInfo.Seats,
-			paymentInfo.total
+			paymentInfo.total,
+			paymentInfo.fromCity.id,
+			paymentInfo.toCity.id,
+			email || userProfileData?.email,
+			phone || userProfileData?.phoneNo,
+			paymentInfo?.selectedMeal
+
 		);
 		// console.log("Checkout Response:", res);
 		if (res && res.sessionId) {

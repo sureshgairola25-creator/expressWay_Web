@@ -621,11 +621,11 @@ export default function TripList() {
                     <TableCell>
                       <Typography
                         sx={{
-                          color: trip.status === 1 ? '#10b981' : '#ef4444',
+                          color: trip.status === true ? '#10b981' : '#ef4444',
                           fontWeight: 500,
                         }}
                       >
-                        {trip.status === 1 ? 'Active' : 'Inactive'}
+                        {trip.status === true ? 'Active' : 'Inactive'}
                       </Typography>
                     </TableCell>
                     <TableCell sx={{ color: '#6b7280' }}>{trip.created_at || 'N/A'}</TableCell>

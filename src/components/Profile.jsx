@@ -44,7 +44,7 @@ import { updateUserDataById } from "../apiServices/userInfo";
 import { toast } from "react-toastify";
 import { setUserInfo } from "../slices/users";
 import { clearUser, setUser } from "../slices/userInfo";
-const BASE_URL = "http://localhost:3000/"
+const BASE_URL = "http://65.1.253.52"
 // --- PURPLE THEME DEFINITION ---
 const profileTheme = createTheme({
 	palette: {
