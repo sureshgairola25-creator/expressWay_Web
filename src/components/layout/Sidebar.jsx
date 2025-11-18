@@ -39,7 +39,7 @@ export default function Sidebar({ open, onToggle }) {
     { text: 'Coupons', icon: <LocalOfferIcon />, path: '/admin/coupons' },
     // { text: 'Manage Locations', icon: <LocationOn />, path: '/admin/locations' },
     { text: 'Manage Routes', icon: <AltRoute />, path: '/admin/routes' },
-    { text: 'Settings', icon: <SettingsIcon />, path: '/admin/settings' },
+    // { text: 'Settings', icon: <SettingsIcon />, path: '/admin/settings' },
   ];
 
   const isActive = (path) => location.pathname === path;

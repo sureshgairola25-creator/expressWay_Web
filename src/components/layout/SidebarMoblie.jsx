@@ -54,6 +54,9 @@ export default function Sidebar({ open, onClose }) {
 				<Link to={"/terms"} style={{ textDecoration: "none", color: "inherit" }}>
 					<Button sx={{ color: "#fff", display: "block", mb: 1 }}>Terms</Button>
 				</Link>
+        <Link to={"/bookings"} style={{ textDecoration: "none", color: "inherit" }}>
+					<Button sx={{ color: "#fff", display: "block", mb: 1 }}>My Bookings</Button>
+				</Link>
 				<Divider sx={{ bgcolor: "gray", mt: 2, mb: 2 }} />
         {isAuthenticated ? (
           <Button

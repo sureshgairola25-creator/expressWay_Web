@@ -99,6 +99,9 @@ const CabCard = ({ booking }) => {
     } else if (status === 'Cancelled') {
         statusColor = 'error';
         statusIcon = <Cancel />;
+    }else if (status === 'Confirmed') {
+        statusColor = 'success';
+        statusIcon = <CheckCircle />;
     }
 
     return (

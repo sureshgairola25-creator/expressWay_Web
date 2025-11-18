@@ -130,6 +130,8 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 	const userProfileData = useSelector((state) => state.userInfo.userInfo);
 	console.log("userProfileData =>", userProfileData);
 	const [couponInput, setCouponInput] = useState("");
+	const [discountAmount, setDiscountAmount] = useState(null);
+
 	const [passengerDetails, setPassengerDetails] = useState({
 		name: userProfileData?.firstName ? userProfileData?.firstName : "",
 		age: userProfileData?.ageRange ? userProfileData?.ageRange : "",
@@ -141,23 +143,58 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 	const [discountPrice, setDiscountPrice] = useState(0);
 
 	// Calculations
-	const subTotal = ticketData.basePrice * ticketData.quantity;
-	const totalAfterDiscount = subTotal - ticketData.couponDiscount;
-	const finalTotal = ticketData.taxIncludedTotal;
+	const fare = Number(paymentInfo?.total || 0);
+	// const meal = Number(paymentInfo?.selectedMeal?.price || 0);
+	const actualSubtotal = fare; // fare + meal
+	
+	// Discount state (you already have discountAmount state)
+	const appliedDiscount = Number(discountAmount || 0);
+	
+	// Total after subtracting discount (but before any gateway/ tax adjustments)
+	const totalAfterDiscount = actualSubtotal - appliedDiscount;
+	
+	// finalTotal comes from backend (discountPrice) when applied, otherwise use totalAfterDiscount
+	const finalTotal = Number(discountPrice && discountPrice > 0 ? discountPrice : totalAfterDiscount);
+
 
 	// Since there's only one payment method, we hardcode it and remove the state/handler
 	const paymentMethod = "cashfree";
 	const cashfreeLabel = "Cashfree Payments (Credit/Debit Card, UPI, Netbanking)";
 
-	const handleApplyCoupon = () => {
-		// In a real application, you'd send couponInput to an API for validation
-		console.log("Attempting to apply coupon:", couponInput);
-		// This is where you would update ticketData (e.g., setCouponDiscount) based on the API response.
-		const couponCodePrice = 399;
-		const afterDiscount = paymentInfo?.total - couponCodePrice;
-		console.log("afterDiscount => ", afterDiscount);
-		setDiscountPrice(afterDiscount);
-	};
+	// const handleApplyCoupon = () => {
+	// 	// In a real application, you'd send couponInput to an API for validation
+	// 	console.log("Attempting to apply coupon:", couponInput);
+	// 	// This is where you would update ticketData (e.g., setCouponDiscount) based on the API response.
+	// 	const couponCodePrice = 399;
+	// 	const afterDiscount = paymentInfo?.total - couponCodePrice;
+	// 	console.log("afterDiscount => ", afterDiscount);
+	// 	setDiscountPrice(afterDiscount);
+	// };
+	
+	const handleApplyCoupon = async () => {
+		if (!couponInput) return;
+	  
+		const res = await validateCoupon(
+		  couponInput,
+		  actualSubtotal, // <-- use actualSubtotal here
+		  userProfileData?.id
+		);
+	  
+		if (!res.success) {
+		  toast.error("Invalid coupon!");
+		  return;
+		}
+	  
+		const discount = Number(res.data.discount || 0);
+		const finalAmount = Number(res.data.finalAmount || 0);
+	  
+		setDiscountAmount(discount);
+		setDiscountPrice(finalAmount);
+	  
+		toast.success(`Coupon Applied! You saved ₹${discount}`);
+	  };
+	  
+	  
 
 	const makePayment = async () => {
 		console.log("passengerDetails =>", passengerDetails);
@@ -178,7 +215,7 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 			paymentInfo?.tripId,
 			age || userProfileData?.ageRange,
 			paymentInfo.Seats,
-			paymentInfo.total,
+			actualSubtotal,
 			paymentInfo.fromCity.id,
 			paymentInfo.toCity.id,
 			email || userProfileData?.email,
@@ -231,6 +268,17 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 		const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
 		return formattedDate;
 	};
+
+	const validateCoupon = async (code, amount, userId) => {
+		const res = await fetch("http://localhost:3000/coupons/validate", {
+		  method: "POST",
+		  headers: { "Content-Type": "application/json" },
+		  body: JSON.stringify({ code, amount, userId }),
+		});
+	  
+		return res.json();
+	  };
+	  
 
 	const TimeDisplayIST = (ISO_DATE_STRING) => {
 		const date = new Date(ISO_DATE_STRING);
@@ -546,15 +594,14 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 											<Grid item xs={6} sx={{ textAlign: "right" }}>
 												<Typography variant="body2" color="text.secondary">
 													Price: (&#x20B9;
-													{paymentInfo?.total.toFixed(2)} excl.)
+													{actualSubtotal.toFixed(2)} excl.)
 												</Typography>
 												<Typography
 													variant="body1"
 													fontWeight="bold"
 													color="primary"
 												>
-													Subtotal: &#x20B9;
-													{paymentInfo?.total.toFixed(2)}
+													Subtotal: ₹{actualSubtotal.toFixed(2)}
 												</Typography>
 											</Grid>
 										</Grid>
@@ -604,12 +651,11 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 									>
 										<Typography variant="body1">Subtotal</Typography>
 										<Typography variant="body1" fontWeight="medium">
-											&#x20B9;{paymentInfo?.total.toFixed(2)}
+											&#x20B9;{actualSubtotal.toFixed(2)}
 										</Typography>
 									</Box>
-
 									{/* Applied Coupon Display (Only shows if a coupon is applied) */}
-									{ticketData.couponDiscount > 0 && (
+									{discountAmount > 0 && (
 										<Box
 											sx={{
 												display: "flex",
@@ -627,18 +673,18 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 												sx={{ display: "flex", alignItems: "center" }}
 											>
 												<CheckCircle sx={{ fontSize: 16, mr: 0.5 }} />{" "}
-												Coupon: **{ticketData.couponCode}** (Applied)
+												Coupon: **{couponInput}** (Applied)
 											</Typography>
 											<Typography
 												variant="body1"
 												color="success.main"
 												fontWeight="medium"
 											>
-												- &#x20B9;{ticketData.couponDiscount.toFixed(2)}
+												- &#x20B9;{discountAmount.toFixed(2)}
 											</Typography>
 										</Box>
 									)}
-									{ticketData.couponDiscount > 0 && (
+									{discountAmount > 0 && (
 										<Box
 											sx={{
 												display: "flex",
@@ -674,9 +720,7 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 										</Typography>
 										<Typography variant="h6" color="primary" fontWeight="bold">
 											&#x20B9;
-											{discountPrice > 0
-												? discountPrice.toFixed(2)
-												: paymentInfo?.total.toFixed(2)}
+											{finalTotal.toFixed(2)}
 										</Typography>
 									</Box>
 								</Box>
@@ -692,9 +736,8 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 									disabled={!paymentMethod}
 								>
 									Confirm & Pay &#x20B9;
-									{discountPrice > 0
-										? discountPrice.toFixed(2)
-										: paymentInfo?.total.toFixed(2)}
+									{finalTotal ? finalTotal.toFixed(2) : (actualSubtotal || 0).toFixed(2)}
+
 								</Button>
 							</Paper>
 						</Grid>
