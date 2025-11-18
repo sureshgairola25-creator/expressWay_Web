@@ -1,7 +1,10 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, Card, CardContent, Typography } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
+import { getActiveCoupons } from '../apiServices/couponService.js';
+
 const offers = [
 	{
 		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
@@ -9,26 +12,42 @@ const offers = [
 	{
 		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
 	},
-	{
-		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
-	},
-	{
-		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
-	},
-	{
-		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
-	},
-	{
-		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
-	},
-	{
-		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
-	},
-	{
-		image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
-	},
+	// {
+	// 	image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
+	// },
+	// {
+	// 	image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
+	// },
+	// {
+	// 	image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
+	// },
+	// {
+	// 	image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
+	// },
+	// {
+	// 	image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
+	// },
+	// {
+	// 	image: "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg",
+	// },
 ];
-export default function ImageCard() {
+	export default function ImageCard() {
+		const [offers, setOffers] = useState([]);
+	 // Simulating API fetch
+	 useEffect(() => {
+		const fetchOffers = async () => {
+		  try {
+			const res = await getActiveCoupons();
+			if (Array.isArray(res)) {
+			  setOffers(res);
+			}
+		  } catch (error) {
+			console.error("Error fetching offers:", error);
+		  }
+		};
+	
+		fetchOffers();
+	  }, []);
 	return (
 		<Box sx={{ py: 1, background: "#f5f5f7" }}>
 			<Box sx={{ textAlign: "center", mb: 4 }}>
@@ -87,7 +106,7 @@ export default function ImageCard() {
 						}}
 					>
 						<CardContent sx={{ width: "100%", py: 3 }}>
-							{/* <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+							<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
 								<Box
 									sx={{
 										bgcolor: "#7c3aed",
@@ -100,26 +119,26 @@ export default function ImageCard() {
 										justifyContent: "center",
 									}}
 								>
-									{React.cloneElement(step.icon, {
+									{/* {React.cloneElement(step.icon, {
 										sx: { fontSize: 40, color: "#fff" },
-									})}
+									})} */}
 								</Box>
 								<Typography
-									variant="h4"
+									variant="h5"
 									sx={{
 										color: "#7c3aed",
-										fontWeight: 700,
+										fontWeight: 500,
 										textShadow: "0 2px 8px rgba(124,58,237,0.10)",
 										letterSpacing: 1,
 									}}
 								>
-									{step.number}
+									{step.code ? step.code : "--"}
 								</Typography>
 							</Box>
 							<Typography
 								variant="h6"
 								sx={{
-									fontWeight: 700,
+									fontWeight: 500,
 									mb: 1,
 									color: "#222",
 									letterSpacing: 0.5,
@@ -135,13 +154,13 @@ export default function ImageCard() {
 									lineHeight: 1.6,
 									mr: 5,
 								}}
-							>
-								{step.desc}
-							</Typography> */}
+							>Discount: 
+								{step.discount_value ? step.discount_value : "-"}
+							</Typography>
 							{/* Container to style the image area */}
 							<Box
 								component="img" // Use the Box component as an <img> tag
-								src={step.image}
+								src={step.image || "https://www.shutterstock.com/image-vector/special-offer-banner-vector-template-260nw-2474802375.jpg"}
 								alt="Card Image Content"
 								sx={{
 									width: "100%", // Make the image span the full width of the CardContent

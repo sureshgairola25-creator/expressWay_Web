@@ -44,7 +44,7 @@ import { updateUserDataById } from "../apiServices/userInfo";
 import { toast } from "react-toastify";
 import { setUserInfo } from "../slices/users";
 import { clearUser, setUser } from "../slices/userInfo";
-const BASE_URL = "http://65.1.253.52"
+const BASE_URL = "http://65.1.253.52/"
 // --- PURPLE THEME DEFINITION ---
 const profileTheme = createTheme({
 	palette: {
@@ -215,7 +215,7 @@ const Sidebar = () => {
 					color={isActiveBookings ? "primary" : "inherit"}
 					startIcon={<BookingsIcon />}
 					fullWidth
-					onClick={() => navigate("/bookings/8576")}
+					onClick={() => navigate("/bookings")}
 					sx={{
 						justifyContent: "flex-start",
 						py: 1.5,

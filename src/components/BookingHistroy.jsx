@@ -35,19 +35,19 @@ const BASE_URL = config.API_BASE_URL;
 const professionalTheme = createTheme({
     palette: {
         primary: {
-            main: '#007bff', // Professional Blue
+            main: '#007bff', 
         },
         secondary: {
-            main: '#6c757d', // Gray/Neutral
+            main: '#6c757d',
         },
         success: {
-            main: '#28a745', // Green for confirmed
+            main: '#28a745',
         },
         error: {
-            main: '#dc3545', // Red for cancelled
+            main: '#dc3545',
         },
         background: {
-            default: '#f4f7f9', // Light, professional background
+            default: '#f4f7f9',
             paper: '#ffffff',
         },
     },
@@ -90,9 +90,9 @@ const CabCard = ({ booking }) => {
     // Determine Chip color and icon based on status
     let statusColor = 'default';
     let statusIcon = <MoreVert />;
-    if (status === 'Confirmed') {
-        statusColor = 'success';
-        statusIcon = <CheckCircle />;
+    if (status === 'Pending') {
+        statusColor = 'warning';
+        statusIcon = <Cancel />;
     } else if (status === 'Completed') {
         statusColor = 'secondary';
         statusIcon = <CheckCircle />;
@@ -158,7 +158,7 @@ const CabCard = ({ booking }) => {
                 {/* Price & Actions */}
                 <Grid item xs={12} sm={3} sx={{ textAlign: { xs: 'left', sm: 'right' } }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'flex-start', sm: 'flex-end' }, mb: 1 }}>
-                        <AttachMoney color="action" sx={{ fontSize: 24 }} />
+                        {/* <AttachMoney color="action" sx={{ fontSize: 24 }} /> */}
                         <Typography variant="h6" color="primary">
                             **₹{fare.toFixed(2)}**
                         </Typography>
@@ -220,7 +220,7 @@ const [error, setError] = useState('');
         fetchRides();
     }, []);
     // In a real application, this data would come from a state management solution (e.g., Redux, Context) or a fetch request.
-    const upcomingBookings = bookings.filter(b => b.status === 'Confirmed');
+    const upcomingBookings = bookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
     const pastBookings = bookings.filter(b => b.status === 'Completed' || b.status === 'Cancelled');
 
 

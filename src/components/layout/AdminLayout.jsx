@@ -79,9 +79,9 @@ export default function AdminLayout({ children }) {
             open={Boolean(profileMenuAnchor)}
             onClose={handleProfileMenuClose}
           >
-            <MenuItem onClick={handleProfileMenuClose}>
+            {/* <MenuItem onClick={handleProfileMenuClose}>
               {isProfileComplete ? 'View Profile' : 'Complete Profile'}
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>

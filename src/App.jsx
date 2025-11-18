@@ -36,7 +36,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import PublicRoute from "./components/PublicRoute";
 import Coupons from "./pages/admin/Coupons";
 
-const BASE_URL = "http://65.1.253.52";
+const BASE_URL = "http://65.1.253.52/";
 
 function App() {
 	const dispatch = useDispatch();

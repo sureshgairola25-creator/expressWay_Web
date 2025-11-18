@@ -155,7 +155,7 @@ export default function TripList() {
         draggable: true
       });
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Failed to add trip';
+      const errorMessage = err?.data?.message || 'Failed to add trip';
       setError(errorMessage);
       
       // Show error toast
@@ -172,6 +172,12 @@ export default function TripList() {
       setLoading(false);
     }
   };
+  function toLocalInputValue(dateString) {
+    const d = new Date(dateString);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0,16);
+  }
+  
 
   const handleEdit = async (trip) => {
     try {
@@ -193,8 +199,10 @@ export default function TripList() {
         pickupPoints: (tripData.pickupPoints || []).map(p => p.id || p), // Handle both object and ID
         dropPoints: (tripData.dropPoints || []).map(d => d.id || d),     // Handle both object and ID
         carId: tripData.carInfo?.id || tripData.carId || '',
-        departureTime: tripData.startTime ? new Date(tripData.startTime).toISOString().slice(0, 16) : '',
-        arrivalTime: tripData.endTime ? new Date(tripData.endTime).toISOString().slice(0, 16) : '',
+        // departureTime: tripData.startTime ? new Date(tripData.startTime).toISOString().slice(0, 16) : '',
+        // arrivalTime: tripData.endTime ? new Date(tripData.endTime).toISOString().slice(0, 16) : '',
+        departureTime: tripData.startTime ? toLocalInputValue(tripData.startTime) : "",
+        arrivalTime: tripData.endTime ? toLocalInputValue(tripData.endTime) : "",
         status: tripData.status ? 1 : 0, // Convert boolean to number
         availableSeats: tripData.availableSeats,
         seatsInfo: tripData.seatsInfo || [],
@@ -628,7 +636,7 @@ export default function TripList() {
                         {trip.status === true ? 'Active' : 'Inactive'}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ color: '#6b7280' }}>{trip.created_at || 'N/A'}</TableCell>
+                    <TableCell sx={{ color: '#6b7280' }}>{new Date(trip.created_at).toLocaleString() || 'N/A'}</TableCell>
                           <TableCell align="right">
                       <Box sx={{ display: 'flex', gap: 1 }}>
                         <Tooltip title="Edit">

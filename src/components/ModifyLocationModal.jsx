@@ -1,4 +1,40 @@
 import { Box, Paper, Typography, Button, Modal, Select, MenuItem } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+// Styled components for consistent select fields
+const StyledSelectBox = styled(Box)({
+  flex: 1,
+  minWidth: 140,
+  '& .MuiInputBase-root': {
+    height: '100%',
+    '&:before, &:after': {
+      display: 'none',
+    },
+  },
+  '& .MuiSelect-select': {
+    padding: '10px 0',
+    display: 'flex',
+    alignItems: 'center',
+    minHeight: '24px',
+    boxSizing: 'border-box',
+  },
+  '& .MuiSelect-icon': {
+    color: 'rgba(0, 0, 0, 0.54)',
+    right: 8,
+  },
+});
+
+const SelectWrapper = styled(Box)({
+  bgcolor: '#f5f5f5',
+  borderRadius: 2,
+  px: 2,
+  py: '6px',
+  mt: 1,
+  height: '56px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+});
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -54,144 +90,140 @@ const ModifyRideModal = ({
 						}}
 					>
 						{/* From */}
-						<Box sx={{ flex: 1, minWidth: 140 }}>
+						<StyledSelectBox>
 							<Typography variant="subtitle1" fontWeight={500}>
 								From
 							</Typography>
-							<Box
-								sx={{
-									bgcolor: "#f5f5f5",
-									borderRadius: 2,
-									px: 2,
-									py: 1,
-									mt: 1,
-								}}
-							>
+							<SelectWrapper>
 								<Select
 									variant="standard"
 									value={fromCity || ""}
 									onChange={fromCityChange}
 									displayEmpty
 									disableUnderline
-									sx={{ flex: 1, bgcolor: "transparent", color: "#222" }}
-									inputProps={{ style: { color: "#222" } }}
+									sx={{ width: '100%' }}
+									inputProps={{ 
+										style: { 
+											color: "#222",
+											padding: 0,
+											margin: 0,
+											height: '100%',
+										} 
+									}}
 								>
 									<MenuItem value="" disabled>
 										Select From City
 									</MenuItem>
-									{fromCityData.map((city) => (
+									{fromCityData?.map((city) => (
 										<MenuItem key={city.id} value={city.id}>
 											{city.name}
 										</MenuItem>
 									))}
 								</Select>
-							</Box>
-						</Box>
+							</SelectWrapper>
+						</StyledSelectBox>
 
 						{/* Pick Up */}
-						<Box sx={{ flex: 1, minWidth: 140 }}>
+						<StyledSelectBox>
 							<Typography variant="subtitle1" fontWeight={500}>
 								Pick Up
 							</Typography>
-							<Box
-								sx={{
-									bgcolor: "#f5f5f5",
-									borderRadius: 2,
-									px: 2,
-									py: 1,
-									mt: 1,
-								}}
-							>
+							<SelectWrapper>
 								<Select
 									variant="standard"
 									value={pickupCity || ""}
 									onChange={pickupLocationChange}
 									displayEmpty
 									disableUnderline
-									sx={{ flex: 1, bgcolor: "transparent", color: "#222" }}
-									inputProps={{ style: { color: "#222" } }}
+									sx={{ width: '100%' }}
+									inputProps={{ 
+										style: { 
+											color: "#222",
+											padding: 0,
+											margin: 0,
+											height: '100%',
+										} 
+									}}
 								>
 									<MenuItem value="" disabled>
 										Select Pick Up
 									</MenuItem>
-									{pickupLocationData.map((location) => (
+									{pickupLocationData?.map((location) => (
 										<MenuItem key={location.id} value={location.id}>
 											{location.name}
 										</MenuItem>
 									))}
 								</Select>
-							</Box>
-						</Box>
+							</SelectWrapper>
+						</StyledSelectBox>
 
 						{/* To */}
-						<Box sx={{ flex: 1, minWidth: 140 }}>
+						<StyledSelectBox>
 							<Typography variant="subtitle1" fontWeight={500}>
 								To
 							</Typography>
-							<Box
-								sx={{
-									bgcolor: "#f5f5f5",
-									borderRadius: 2,
-									px: 2,
-									py: 1,
-									mt: 1,
-								}}
-							>
+							<SelectWrapper>
 								<Select
 									variant="standard"
 									value={selectedCity || ""}
 									onChange={tolocationChange}
 									displayEmpty
 									disableUnderline
-									sx={{ flex: 1, bgcolor: "transparent", color: "#222" }}
-									inputProps={{ style: { color: "#222" } }}
+									sx={{ width: '100%' }}
+									inputProps={{ 
+										style: { 
+											color: "#222",
+											padding: 0,
+											margin: 0,
+											height: '100%',
+										} 
+									}}
 								>
 									<MenuItem value="" disabled>
 										Select To City
 									</MenuItem>
-									{toCityData.map((city) => (
+									{toCityData?.map((city) => (
 										<MenuItem key={city.id} value={city.id}>
 											{city.name}
 										</MenuItem>
 									))}
 								</Select>
-							</Box>
-						</Box>
+							</SelectWrapper>
+						</StyledSelectBox>
 
 						{/* Drop */}
-						<Box sx={{ flex: 1, minWidth: 140 }}>
+						<StyledSelectBox>
 							<Typography variant="subtitle1" fontWeight={500}>
 								Drop
 							</Typography>
-							<Box
-								sx={{
-									bgcolor: "#f5f5f5",
-									borderRadius: 2,
-									px: 2,
-									py: 1,
-									mt: 1,
-								}}
-							>
+							<SelectWrapper>
 								<Select
 									variant="standard"
 									value={dropCity || ""}
 									onChange={(e) => setDropCity(e.target.value)}
 									displayEmpty
 									disableUnderline
-									sx={{ flex: 1, bgcolor: "transparent", color: "#222" }}
-									inputProps={{ style: { color: "#222" } }}
+									sx={{ width: '100%' }}
+									inputProps={{ 
+										style: { 
+											color: "#222",
+											padding: 0,
+											margin: 0,
+											height: '100%',
+										} 
+									}}
 								>
 									<MenuItem value="" disabled>
 										Select Drop City
 									</MenuItem>
-									{dropLocationData.map((city) => (
+									{dropLocationData?.map((city) => (
 										<MenuItem key={city.id} value={city.id}>
 											{city.name}
 										</MenuItem>
 									))}
 								</Select>
-							</Box>
-						</Box>
+							</SelectWrapper>
+						</StyledSelectBox>
 
 						{/* Journey Date */}
 						<Box sx={{ flex: 1, minWidth: 170 }}>

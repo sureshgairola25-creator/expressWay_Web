@@ -180,7 +180,7 @@ const CouponList = () => {
                         />
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2">{coupon.end_date}</Typography>
+                        <Typography variant="body2">{new Date(coupon.created_at).toLocaleString()}</Typography>
                       </TableCell>
                       <TableCell>
                         <Chip

@@ -455,7 +455,7 @@ export default function HeroSection() {
 											}}
 											onClick={() => setOpenPickupModal(true)}
 										>
-											Pick Up :{" "}
+											{" "}
 											{
 												pickupLocationData.filter(
 													(item) => item.id == pickupCity
@@ -648,7 +648,7 @@ export default function HeroSection() {
 											}}
 											onClick={() => setOpenDropModal(true)}
 										>
-											Drop :{" "}
+											{" "}
 											{
 												dropLocationData.filter(
 													(item) => item.id == dropCity

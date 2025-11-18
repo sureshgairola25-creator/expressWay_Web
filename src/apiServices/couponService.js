@@ -55,7 +55,7 @@ export const deleteCoupon = async (id) => {
 // Public endpoints
 export const getActiveCoupons = async () => {
   try {
-    const response = await apiClient.get(COUPON_ENDPOINTS.ACTIVE);
+    const response = await apiClient.get(COUPON_ENDPOINTS.BASE);
     return response.data.map(coupon => formatCouponForDisplay(coupon));
   } catch (error) {
     console.error('Error fetching active coupons:', error);

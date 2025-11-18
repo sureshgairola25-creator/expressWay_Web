@@ -109,7 +109,7 @@ export default function ListPage({ title, columns, rows, breadcrumbs, onAdd, onE
             <Typography variant="h5" sx={{ fontWeight: 600, color: '#1f2937' }}>
               {title}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <TextField
                 size="small"
                 placeholder="Search..."
@@ -145,14 +145,13 @@ export default function ListPage({ title, columns, rows, breadcrumbs, onAdd, onE
               >
                 Add New
               </Button>
-            </Box>
+            </Box> */}
           </Box>
 
           <Divider />
 
           {/* Data Grid */}
           <Box sx={{
-            height: 500,
             width: '100%',
             '& .MuiDataGrid-root': {
               border: 'none',
@@ -193,11 +192,14 @@ export default function ListPage({ title, columns, rows, breadcrumbs, onAdd, onE
             <DataGrid
               rows={filteredRows}
               columns={dataGridColumns}
-              paginationModel={paginationModel}
-              onPaginationModelChange={setPaginationModel}
-              pageSizeOptions={[5, 10, 25]}
-              density="standard"
-              disableRowSelectionOnClick
+              pagination={false}               // TURN PAGINATION OFF
+              hideFooterPagination={true}      // HIDE PAGINATION UI
+              hideFooter={true}    
+              // paginationModel={paginationModel}
+              // onPaginationModelChange={setPaginationModel}
+              // pageSizeOptions={[5, 10, 25]}
+              // density="standard"
+              // disableRowSelectionOnClick
               sx={{
                 border: 0,
                 '& .MuiDataGrid-cell:focus': {

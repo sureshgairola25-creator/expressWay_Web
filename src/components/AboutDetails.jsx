@@ -372,7 +372,7 @@ const AboutUs = () => {
 								Our partners are at the heart of our success. With trust and shared
 								values, we drive growth and set new industry benchmarks.
 							</Typography>
-							<Paper elevation={1} sx={{ p: 4 }}>
+							{/* <Paper elevation={1} sx={{ p: 4 }}>
 								<Grid
 									container
 									spacing={4}
@@ -383,7 +383,7 @@ const AboutUs = () => {
 										<PartnerLogo name={partner} key={index} />
 									))}
 								</Grid>
-							</Paper>
+							</Paper> */}
 						</Box>
 					</Container>
 				</Box>

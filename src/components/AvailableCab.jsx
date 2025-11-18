@@ -985,66 +985,114 @@ const AvailableCab = () => {
 																			selected.includes(
 																				seat.seat_number
 																			);
-																		return (
-																			<Grid
-																				item
-																				key={
-																					seat.seat_number
-																				}
-																			>
-																				<Button
-																					variant={
-																						isSelected
-																							? "contained"
-																							: "outlined"
-																					}
-																					color={
-																						seat.isBooked
-																							? "error"
-																							: seat.seat_type ===
-																							  "window"
-																							? "success"
-																							: "warning"
-																					}
-																					disabled={
-																						seat.isBooked
-																					}
-																					onClick={() =>
-																						handleSeatClick(
-																							cab.id,
-																							seat.seat_number
-																						)
-																					}
-																					sx={{
-																						width: 70,
-																						height: 50,
-																						borderRadius: 2,
-																						fontWeight:
-																							"bold",
-																						transition:
-																							"0.2s",
-																						"&:hover": {
-																							transform:
-																								"scale(1.05)",
-																						},
-																					}}
-																				>
-																					{
-																						seat.seat_number
-																					}
-																					<Typography
-																						variant="caption"
-																						display="block"
+																			return (
+																				<Grid item key={seat.seat_number}>
+																					<Button
+																						variant={isSelected ? "contained" : "outlined"}
+																						color={
+																							seat.isBooked
+																								? "error"
+																								: seat.seat_type === "window"
+																								? "success"
+																								: "warning"
+																						}
+																						disabled={seat.isBooked}
+																						onClick={() => handleSeatClick(cab.id, seat.seat_number)}
 																						sx={{
-																							fontSize: 10,
+																							width: 70,
+																							height: 60,
+																							borderRadius: 2,
+																							fontWeight: "bold",
+																							transition: "0.2s",
+																							display: "flex",
+																							flexDirection: "column",
+																							justifyContent: "center",
+																							alignItems: "center",
+																							"&:hover": {
+																								transform: "scale(1.05)",
+																							},
 																						}}
 																					>
-																						₹
-																						{seat.price}
-																					</Typography>
-																				</Button>
-																			</Grid>
-																		);
+																						{/* Bigger Seat Number */}
+																						<Typography
+																							sx={{ fontSize: 20, fontWeight: "bold", lineHeight: 1 }}
+																						>
+																							{seat.seat_number}
+																						</Typography>
+																			
+																						{/* Price BELOW seat number */}
+																						<Typography
+																							variant="caption"
+																							display="block"
+																							sx={{ fontSize: 13, marginTop: 0.3 }}
+																						>
+																							₹{seat.price}
+																						</Typography>
+																					</Button>
+																				</Grid>
+																			);
+																			
+																		// return (
+																		// 	<Grid
+																		// 		item
+																		// 		key={
+																		// 			seat.seat_number
+																		// 		}
+																		// 	>
+																		// 		<Button
+																		// 			variant={
+																		// 				isSelected
+																		// 					? "contained"
+																		// 					: "outlined"
+																		// 			}
+																		// 			color={
+																		// 				seat.isBooked
+																		// 					? "error"
+																		// 					: seat.seat_type ===
+																		// 					  "window"
+																		// 					? "success"
+																		// 					: "warning"
+																		// 			}
+																		// 			disabled={
+																		// 				seat.isBooked
+																		// 			}
+																		// 			onClick={() =>
+																		// 				handleSeatClick(
+																		// 					cab.id,
+																		// 					seat.seat_number
+																		// 				)
+																		// 			}
+																		// 			sx={{
+																		// 				width: 70,
+																		// 				height: 50,
+																		// 				borderRadius: 2,
+																		// 				fontWeight:
+																		// 					"bold",
+																		// 				fontSize: 17,
+																		// 				transition:
+																		// 					"0.2s",
+																		// 				"&:hover": {
+																		// 					transform:
+																		// 						"scale(1.05)",
+																		// 				},
+																		// 			}}
+																		// 		>
+																		// 			{
+																		// 				seat.seat_number
+																		// 			}
+																		// 			<Typography
+																		// 				variant="caption"
+																		// 				display="block"
+																		// 				sx={{
+																		// 					fontSize: 15,
+																		// 				}}
+																		// 			>
+																		// 				₹
+																		// 				{seat.price}
+																		// 			</Typography>
+																		// 		</Button>
+																		// 	</Grid>
+																		// );
 																	})}
 																</Grid>
 															</Box>

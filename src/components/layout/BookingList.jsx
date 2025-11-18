@@ -1,21 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ListPage from './ListPage';
 import PageContainer from './PageContainer';
+import { getAllBookings } from "../../apiServices/booking";
 
-const columns = ['Booking ID', 'User', 'Trip', 'Seats', 'Status', 'Amount'];
-
-const rows = [
-  { 'Booking ID': 'BK001', User: 'John Doe', Trip: 'Trip A', Seats: 2, Status: 'Confirmed', Amount: '$50' },
-  { 'Booking ID': 'BK002', User: 'Jane Smith', Trip: 'Trip B', Seats: 1, Status: 'Pending', Amount: '$25' },
-  { 'Booking ID': 'BK003', User: 'Bob Johnson', Trip: 'Trip A', Seats: 3, Status: 'Confirmed', Amount: '$75' },
-  { 'Booking ID': 'BK004', User: 'Alice Brown', Trip: 'Trip C', Seats: 1, Status: 'Cancelled', Amount: '$20' },
-  { 'Booking ID': 'BK005', User: 'Charlie Wilson', Trip: 'Trip B', Seats: 2, Status: 'Confirmed', Amount: '$50' },
-  { 'Booking ID': 'BK006', User: 'Diana Prince', Trip: 'Trip C', Seats: 1, Status: 'Pending', Amount: '$20' },
-  { 'Booking ID': 'BK007', User: 'Edward Norton', Trip: 'Trip A', Seats: 2, Status: 'Confirmed', Amount: '$50' },
-  { 'Booking ID': 'BK008', User: 'Fiona Apple', Trip: 'Trip B', Seats: 1, Status: 'Confirmed', Amount: '$25' },
-];
+const columns = ['id', 'User', 'Trip', 'Seats', 'Status', 'Amount'];
 
 export default function BookingList() {
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadBookings() {
+      const data = await getAllBookings();
+      const bookings = Array.isArray(data?.data) ? data.data : data;
+
+      const mapped = bookings.map(b => ({
+        id: b.id,
+        User: `${b.user?.firstName || ''} ${b.user?.lastName || ''}`.trim() || 'N/A',
+        Trip: `${b.trip?.startLocation?.name} → ${b.trip?.endLocation?.name}`,
+        Seats: b.seats?.join(', ') || '-',
+        Status: b.bookingStatus,
+        Amount: `₹${b.totalAmount}`
+      }));
+
+      setRows(mapped);
+      setLoading(false);
+    }
+
+    loadBookings();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <PageContainer>
       <ListPage title="Booking List" columns={columns} rows={rows} />

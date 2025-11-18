@@ -15,6 +15,7 @@ const DropModal = ({
 
 	const dropLocationChange = (e) => {
 		setDropCity(e.target.value);
+		setOpenDropModal(false);
 	};
 
 	const modalStyle = {

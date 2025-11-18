@@ -24,7 +24,11 @@ const PickUpModal = ({
 		p: 4,
 		borderRadius: 2,
 	};
-
+	const handlePickupChange = (event) => {		
+		pickupLocationChange(event);
+		setOpenPickupModal(false);
+	  };
+	  
 	return (
 		<Box>
 			<Modal
@@ -84,7 +88,7 @@ const PickUpModal = ({
 								<Select
 									variant="standard"
 									value={pickupCity}
-									onChange={pickupLocationChange}
+									onChange={handlePickupChange}
 									displayEmpty
 									disableUnderline
 									sx={{
