@@ -5,20 +5,24 @@ const API_ENDPOINTS = {
 };
 
 
-export async function initiateCheckout(userId, tripId, age, selectedSeats, totalAmount, pickupPointId, dropPointId, customerEmail, customerPhone, selectedMeal) {
+export async function initiateCheckout(userId, tripId, age, selectedSeats, totalAmount, couponInput, finalTotal, discountAmount, pickupPointId, dropPointId, customerEmail, customerPhone, selectedMeal,journeyDate) {
   try {
-    console.log("Initiating checkout for:", { userId, tripId, selectedSeats, totalAmount, pickupPointId, dropPointId, customerEmail, customerPhone });
+    console.log("Initiating checkout for:", { userId, tripId, selectedSeats, totalAmount, pickupPointId, dropPointId, customerEmail, customerPhone,journeyDate });
     const response = await apiClient.post(API_ENDPOINTS.BOOKING, {
       userId,
       tripId,
       age,
       selectedSeats,
-      totalAmount,
+      totalAmount:totalAmount,
+      couponCode:couponInput,
+      finalPayableAmount:finalTotal,
+      discountAmount:discountAmount,
       pickupPointId,
       dropPointId,    
       customerEmail,
       customerPhone,
-      selectedMeal 
+      selectedMeal,
+      journeyDate
     });
     return response;
   } catch (error) {

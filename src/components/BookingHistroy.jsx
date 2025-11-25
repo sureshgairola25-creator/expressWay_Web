@@ -225,6 +225,10 @@ const [error, setError] = useState('');
     // In a real application, this data would come from a state management solution (e.g., Redux, Context) or a fetch request.
     const upcomingBookings = bookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
     const pastBookings = bookings.filter(b => b.status === 'Completed' || b.status === 'Cancelled');
+    // const today = new Date();
+    // const upcomingBookings = bookings.filter(b => b.journeyDate >= today);
+    // const pastBookings = bookings.filter(b => b.journeyDate < today);
+
 
 
     return (

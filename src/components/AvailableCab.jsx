@@ -42,6 +42,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { setPaymentInfo } from "../slices/paymentInfo";
 import MealOptions from "./MealOptions";
 import CarTopView from "./layout/SeatLayout";
+import CAR from '../assets/CAR.svg'; 
+import Handle from '../assets/Handle.svg'; 
+import Seat from '../assets/Seat.svg';
 
 const AvailableCab = () => {
 	const [selectedSeats, setSelectedSeats] = useState([]);
@@ -127,7 +130,7 @@ const AvailableCab = () => {
 				const date = searchParams.get("date");
 				const dropCity = searchParams.get("drop");
 				const pickup = searchParams.get("pickup");
-
+				// if (date) setJourneyDate(date);
 				setLoading(true);
 
 				const response = await getAvailableCabByDate(
@@ -156,6 +159,7 @@ const AvailableCab = () => {
 				const dropLocationApiData = await getDropLocations(toCity);
 				setDropLocationData(dropLocationApiData.data);
 
+
 				setLoading(false);
 			} catch (error) {
 				console.error("Error fetching cab data:", error);
@@ -164,6 +168,20 @@ const AvailableCab = () => {
 
 		fetchCabData();
 	}, []);
+	useEffect(() => {
+		const urlDate = searchParams.get("date");
+		if (urlDate) setJourneyDate(urlDate);
+	  }, []);
+	  
+
+	const seatPositions = [
+		{ top: "28%", left: "35%" }, // Seat 1 - front left
+		{ top: "50%", left: "35%" }, // Seat 2 - middle left
+		{ top: "50%", left: "65%" }, // Seat 3 - middle right
+		{ top: "77%", left: "35%" }, // Seat 4 - back left
+		{ top: "77%", left: "65%" }, // Seat 5 - back right
+	  ];
+	  
 
 	const isFirstRender = useRef(true);
 
@@ -237,9 +255,12 @@ const AvailableCab = () => {
 			drop: cab?.dropPoint,
 			cabStartTime: cab?.startTime,
 			cabDropTime: cab?.endTime,
-			selectedMeal:selectedMeal
+			selectedMeal:selectedMeal,
+			journeyDate: journeyDate 
 		};
 		const token = localStorage.getItem("authToken");
+		console.log(paymentInfo,"payment info");
+		
 		dispatch(setPaymentInfo(paymentInfo));
 		if (token){
 			navigate(`/payment/preview`);
@@ -289,7 +310,7 @@ const AvailableCab = () => {
 			setModifyData(
 				fromCity ? fromCity : searchParams.get("from"),
 				selectedCity ? selectedCity : toCity,
-				journeyDate ? journeyDate : date,
+				journeyDate,
 				pickupCity ? pickupCity : pickup,
 				dropCity ? dropCity : searchParams.get("drop")
 			);
@@ -752,7 +773,7 @@ const AvailableCab = () => {
 								<Box display="flex" alignItems="center" gap={1}>
 									<CalendarTodayIcon color="action" />
 									<Typography variant="body1" fontWeight={500}>
-										{journeyDate ? journeyDate : searchParams.get("date")}
+										{journeyDate}
 									</Typography>
 								</Box>
 							</Box>
@@ -964,139 +985,101 @@ const AvailableCab = () => {
 														{/* Seat Selection */}
 														<Grid item xs={12} md={7}>
 															<Box
-																display="flex"
-																flexDirection="column"
-																alignItems="center"
+																sx={{
+																	width: "100%",
+																	maxWidth: 400,
+																	height: "400px",
+																	position: "relative",
+																	mx: "auto",
+																	backgroundColor: "#f7f7f7",
+
+																}}
 															>
-																<DirectionsCarIcon
+																{/* Car Image */}
+																<Box
+																	component="img"
+																	src={CAR}
 																	sx={{
-																		fontSize: 44,
-																		mb: 2,
-																		color: "#5f6368",
+																		width: "100%",
+																		height: "100%",
+																		objectFit: "contain",
+																		pointerEvents: "none",
 																	}}
 																/>
-																<Grid
-																	container
-																	spacing={2}
-																	justifyContent="center"
-																>
-																	{cab.seatsInfo.map((seat) => {
-																		const isSelected =
-																			selected.includes(
-																				seat.seat_number
-																			);
-																			return (
-																				<Grid item key={seat.seat_number}>
-																					<Button
-																						variant={isSelected ? "contained" : "outlined"}
-																						color={
-																							seat.isBooked
-																								? "error"
-																								: seat.seat_type === "window"
-																								? "success"
-																								: "warning"
-																						}
-																						disabled={seat.isBooked}
-																						onClick={() => handleSeatClick(cab.id, seat.seat_number)}
-																						sx={{
-																							width: 70,
-																							height: 60,
-																							borderRadius: 2,
-																							fontWeight: "bold",
-																							transition: "0.2s",
-																							display: "flex",
-																							flexDirection: "column",
-																							justifyContent: "center",
-																							alignItems: "center",
-																							"&:hover": {
-																								transform: "scale(1.05)",
-																							},
-																						}}
-																					>
-																						{/* Bigger Seat Number */}
-																						<Typography
-																							sx={{ fontSize: 20, fontWeight: "bold", lineHeight: 1 }}
-																						>
-																							{seat.seat_number}
-																						</Typography>
-																			
-																						{/* Price BELOW seat number */}
-																						<Typography
-																							variant="caption"
-																							display="block"
-																							sx={{ fontSize: 13, marginTop: 0.3 }}
-																						>
-																							₹{seat.price}
-																						</Typography>
-																					</Button>
-																				</Grid>
-																			);
-																			
-																		// return (
-																		// 	<Grid
-																		// 		item
-																		// 		key={
-																		// 			seat.seat_number
-																		// 		}
-																		// 	>
-																		// 		<Button
-																		// 			variant={
-																		// 				isSelected
-																		// 					? "contained"
-																		// 					: "outlined"
-																		// 			}
-																		// 			color={
-																		// 				seat.isBooked
-																		// 					? "error"
-																		// 					: seat.seat_type ===
-																		// 					  "window"
-																		// 					? "success"
-																		// 					: "warning"
-																		// 			}
-																		// 			disabled={
-																		// 				seat.isBooked
-																		// 			}
-																		// 			onClick={() =>
-																		// 				handleSeatClick(
-																		// 					cab.id,
-																		// 					seat.seat_number
-																		// 				)
-																		// 			}
-																		// 			sx={{
-																		// 				width: 70,
-																		// 				height: 50,
-																		// 				borderRadius: 2,
-																		// 				fontWeight:
-																		// 					"bold",
-																		// 				fontSize: 17,
-																		// 				transition:
-																		// 					"0.2s",
-																		// 				"&:hover": {
-																		// 					transform:
-																		// 						"scale(1.05)",
-																		// 				},
-																		// 			}}
-																		// 		>
-																		// 			{
-																		// 				seat.seat_number
-																		// 			}
-																		// 			<Typography
-																		// 				variant="caption"
-																		// 				display="block"
-																		// 				sx={{
-																		// 					fontSize: 15,
-																		// 				}}
-																		// 			>
-																		// 				₹
-																		// 				{seat.price}
-																		// 			</Typography>
-																		// 		</Button>
-																		// 	</Grid>
-																		// );
-																	})}
-																</Grid>
+
+																{/* Steering */}
+																<Box
+																	component="img"
+																	src={Handle}
+																	sx={{
+																		position: "absolute",
+																		top: "25%",
+																		left: "65%",
+																		width: "40px",
+																		height: "40px",
+																		transform: "translate(-50%, -50%)",
+																	}}
+																/>
+
+																{/* Seats */}
+																{cab.seatsInfo.map((seat, index) => {
+																	const isSelected = selectedSeats[cab.id]?.includes(seat.seat_number);
+
+																	return (
+																		<Box
+																			key={seat.seat_number}
+																			// onClick={() => handleSeatClick(cab.id, seat.seat_number)}
+																			onClick={() => !seat.isBooked && handleSeatClick(cab.id, seat.seat_number)}
+																			sx={{
+																				position: "absolute",
+																				top: seatPositions[index].top,
+																				left: seatPositions[index].left,
+																				transform: "translate(-50%, -50%)",
+																				cursor: seat.isBooked ? "not-allowed" : "pointer",
+																				opacity: seat.isBooked ? 0.5 : 1,
+																				textAlign: "center",
+																				display: "flex",
+																				flexDirection: "column",
+																				alignItems: "center",
+																				gap: "2px", // 👉 Yahi perfect spacing control karega
+																			}}
+																		>
+																			{/* Seat Number */}
+																			<Typography
+																				sx={{
+																					fontSize: "13px",
+																					fontWeight: "bold",
+																					mb: "-4px", // Agar aur tight chahiye
+																				}}
+																			>
+																				{seat.seat_number}
+																			</Typography>
+
+																			{/* Seat Image */}
+																			<Box
+																				component="img"
+																				src={Seat}
+																				sx={{
+																					width: 40,
+																					height: 50,
+																					borderRadius: "10px",
+																					border: isSelected ? "3px solid blue" : "2px solid transparent",
+																					backgroundColor: seat.isBooked ? "grey" : "white",
+																				}}
+																			/>
+
+																			{/* Price */}
+																			<Typography sx={{ fontSize: "12px", mt: "-2px", fontWeight: "500" }}>
+																				₹{seat.price}
+																			</Typography>
+																		</Box>
+
+																	);
+																})}
 															</Box>
 														</Grid>
+
+
 														{/* <CarTopView /> */}
 														
 														<MealOptions 
@@ -1204,7 +1187,8 @@ const AvailableCab = () => {
 						dropCity={dropCity ? dropCity : searchParams.get("drop")}
 						setDropCity={setDropCity}
 						dropLocationData={dropLocationData}
-						journeyDate={journeyDate ? journeyDate : searchParams.get("date")}
+						// journeyDate={journeyDate ? journeyDate : searchParams.get("date")}
+						journeyDate={journeyDate}
 						setJourneyDate={setJourneyDate}
 						handleSearch={handleSearch}
 					/>

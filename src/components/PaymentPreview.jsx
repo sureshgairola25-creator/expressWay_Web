@@ -216,11 +216,15 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 			age || userProfileData?.ageRange,
 			paymentInfo.Seats,
 			actualSubtotal,
+			couponInput,
+			finalTotal,
+			discountAmount,
 			paymentInfo.fromCity.id,
 			paymentInfo.toCity.id,
 			email || userProfileData?.email,
 			phone || userProfileData?.phoneNo,
-			paymentInfo?.selectedMeal
+			paymentInfo?.selectedMeal,
+			paymentInfo?.journeyDate
 
 		);
 		// console.log("Checkout Response:", res);
@@ -270,7 +274,7 @@ const PaymentPreview = ({ ticketData = defaultTicketData }) => {
 	};
 
 	const validateCoupon = async (code, amount, userId) => {
-		const res = await fetch("http://localhost:3000/coupons/validate", {
+		const res = await fetch("https://api.expresswaycab.com/coupons/validate", {
 		  method: "POST",
 		  headers: { "Content-Type": "application/json" },
 		  body: JSON.stringify({ code, amount, userId }),

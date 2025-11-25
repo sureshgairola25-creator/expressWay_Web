@@ -128,6 +128,8 @@ export default function TripList() {
         startTime: newTrip.departureTime.replace('T', ' '), // Format: '2025-10-26 10:27:00'
         endTime: newTrip.arrivalTime.replace('T', ' '),     // Format: '2025-10-26 23:29:00'
         status: newTrip.status,
+        isRecurring: true,
+        repeatType: "daily",      
         seats: seats.map(seat => ({
           seatNumber: seat.seatNumber,
           seatType: seat.seatType,
